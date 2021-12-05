@@ -49,7 +49,7 @@ function App() {
     });
   }
 
-  if (loading) return null; 
+  if (loading || !appInitialized) return null; 
   return (
     // React Fragment (<>)
     <>
