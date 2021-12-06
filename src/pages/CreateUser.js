@@ -29,7 +29,7 @@ function CreateUser( {setLoggedIn, setUserInfo}) {
             const errorMessage = error.message; 
             console.warn(errorCode, errorMessage); 
         }); 
-    }, []); 
+    }, [setLoggedIn, setUserInfo]); 
     
     return (
         <div className="PageWrapper">
