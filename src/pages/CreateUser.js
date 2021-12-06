@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth"; 
 import CreateUserForm from '../components/CreateUserForm'; 
 
-function CreateUser( {setLoggedIn, setUserInfo}) {
+function CreateUser( {setLoggedIn, setUserInfo, setErrors}) {
 
     const signUpUser = useCallback((e)=> {
         e.preventDefault(); 
@@ -23,13 +23,15 @@ function CreateUser( {setLoggedIn, setUserInfo}) {
                 uid: user.uid, 
                 accessToken: user.accessToken, 
             }); 
+            setErrors(); 
         })
         .catch((error) => {
             const errorCode = error.code; 
             const errorMessage = error.message; 
-            console.warn(errorCode, errorMessage); 
+            console.warn(error, errorCode, errorMessage); 
+            setErrors(errorMessage); 
         }); 
-    }, [setLoggedIn, setUserInfo]); 
+    }, [setLoggedIn, setUserInfo, setErrors]); 
     
     return (
         <div className="PageWrapper">

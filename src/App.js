@@ -16,6 +16,8 @@ function App() {
   const [loading, setLoading] = useState(true); 
   const [userInfo, setUserInfo] = useState({}); 
   const [appInitialized, setAppInitialized] = useState(false); 
+  //Error 
+  const [errors, setErrors] = useState(); 
 
   useEffect(() => {
     initializeApp(FirebaseConfig); 
@@ -44,8 +46,10 @@ function App() {
     signOut(auth).then(() => {
       setUserInfo({}); 
       setLoggedIn(false); 
+      setErrors(); 
     }).catch((error) => {
       console.warn(error); 
+      setErrors(error); 
     });
   }
 
@@ -54,11 +58,12 @@ function App() {
     // React Fragment (<>)
     <>
       <Header logout={logout} loggedIn={loggedIn}/>
+      {errors && <p className="Error PageWrapper">{errors}</p>}
       <Router>
         <Routes>
           <Route path ="/user/:id" element={loggedIn ? <UserProfile userInfo={userInfo}/> : <Navigate to="/" />} /> 
-          <Route path ="/create" element={!loggedIn ? (<CreateUser setLoggedIn={setLoggedIn} setUserInfo={setUserInfo}/>) : (<Navigate to={`/user/${userInfo.uid}`} /> ) } />
-          <Route path ="/" element={!loggedIn ? (<Login setLoggedIn={setLoggedIn} setUserInfo={setUserInfo}/>) : (<Navigate to={`/user/${userInfo.uid}`} /> )} /> 
+          <Route path ="/create" element={!loggedIn ? (<CreateUser setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} setErrors={setErrors}/>) : (<Navigate to={`/user/${userInfo.uid}`} /> ) } />
+          <Route path ="/" element={!loggedIn ? (<Login setLoggedIn={setLoggedIn} setUserInfo={setUserInfo} setErrors={setErrors}/>) : (<Navigate to={`/user/${userInfo.uid}`} /> )} /> 
         </Routes>
       </Router>
     </>
